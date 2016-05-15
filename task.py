@@ -16,7 +16,7 @@ class mainWindow:
         self.scrolled_window.set_policy(gtk.POLICY_AUTOMATIC, gtk.POLICY_ALWAYS)
         self.window.vbox.pack_start(self.scrolled_window, True, True, 0)
         self.scrolled_window.show()
-        self.store = gtk.ListStore(str, str, int, str, float, str, str, int)
+        self.store = gtk.ListStore(str, str, int, str, float, str, str, str)
         for i in psutil.pids():
             self.processos[i] = psutil.Process(i)
 
@@ -103,7 +103,7 @@ class mainWindow:
                 self.processos[i] = psutil.Process(i)
                 self.store.append([self.processos[i].name(), self.processos[i].username(), i,
                                    (str(int(self.processos[i].cpu_percent()))+"%"),
-                                   (self.processos[i].memory_percent(), 3),
+                                   round(self.processos[i].memory_percent(), 3),
                                    self.get_time(self.processos[i].create_time()), self.processos[i].status(),
                                    self.processos[i].nice()])
         z = self.store.get_iter_first()
