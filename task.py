@@ -16,13 +16,13 @@ class mainWindow:
         self.scrolled_window.set_policy(gtk.POLICY_AUTOMATIC, gtk.POLICY_ALWAYS)
         self.window.vbox.pack_start(self.scrolled_window, True, True, 0)
         self.scrolled_window.show()
-        self.store = gtk.ListStore(str, str, int, int, float, str, str, int)
+        self.store = gtk.ListStore(str, str, int, str, float, str, str, int)
         for i in psutil.pids():
             self.processos[i] = psutil.Process(i)
 
         for i, j in self.processos.iteritems():
             if i in psutil.pids():
-                self.store.append([j.name(), j.username(), i, int(j.cpu_percent()), round(j.memory_percent(), 3),
+                self.store.append([j.name(), j.username(), i, (str(int(j.cpu_percent()))+"%"), round(j.memory_percent(), 3),
                                    self.get_time(j.create_time()), j.status(), j.nice()])
         self.tree = gtk.TreeView(self.store)
         self.tree.set_model(self.store)
@@ -102,7 +102,8 @@ class mainWindow:
             if i not in self.processos:
                 self.processos[i] = psutil.Process(i)
                 self.store.append([self.processos[i].name(), self.processos[i].username(), i,
-                                   int(self.processos[i].cpu_percent()), round(self.processos[i].memory_percent(), 3),
+                                   (str(int(self.processos[i].cpu_percent()))+"%"),
+                                   (self.processos[i].memory_percent(), 3),
                                    self.get_time(self.processos[i].create_time()), self.processos[i].status(),
                                    self.processos[i].nice()])
         z = self.store.get_iter_first()
@@ -110,7 +111,7 @@ class mainWindow:
             if self.store.get_value(z, 2) in psutil.pids():
                 if self.store.get_value(z, 2) in self.processos:
                     j = self.processos[self.store.get_value(z, 2)]
-                    self.store.set_value(z, 3, int(j.cpu_percent()))
+                    self.store.set_value(z, 3, (str(int(j.cpu_percent()))+"%"))
                     self.store.set_value(z, 4, round(j.memory_percent(), 3))
                     self.store.set_value(z, 5, self.get_time(j.create_time()))
                     self.store.set_value(z, 6, j.status())
