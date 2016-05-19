@@ -64,6 +64,7 @@ class mainWindow:
         self.tree.append_column(column)
         column = gtk.TreeViewColumn("Nice", renderer, text=7)
         column.set_sort_column_id(7)
+        self.tree.append_column(column)
         # instancia botoes e os conecta a suas funcoes
         self.matar_processo = gtk.Button("Finalizar")
         self.matar_processo.connect("clicked", self.killproc)
@@ -141,7 +142,6 @@ class mainWindow:
         uso = round(uso, 2)
         ram = str(uso).split('.')
         return "{},{}%".format(int(ram[0]), int(ram[1]))
-
 
     # metodo que inicia a GUI
     def main(self):
@@ -273,7 +273,9 @@ class mainWindow:
         comando = self.comando.get_text()
         nice = self.comando.get_text()
         arg = [str("nice -n {}".format(str(nice)))]
-        os.execvp(comando, arg)
+        if os.fork() == 0:
+            os.execvp(comando, arg)
+            exit()
 
 if __name__ == "__main__":
     window = mainWindow()
