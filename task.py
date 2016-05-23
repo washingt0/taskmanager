@@ -12,7 +12,7 @@ class mainWindow:
         self.processos = {}
         # instancia a Janela do gerenciador e define o titulo, tamanho, posicao e nao permite redimensionamento
         self.window = gtk.Dialog()
-        self.window.set_title("Fodendo Gerenciador")
+        self.window.set_title("******* Gerenciador")
         self.window.set_size_request(950, 600)
         self.window.set_resizable(False)
         self.window.set_position(gtk.WIN_POS_CENTER)
@@ -189,7 +189,10 @@ class mainWindow:
                 del self.processos[self.store.get_value(z, 2)]
                 self.store.remove(z)
             # obtem iterador para o proximo registro
-            z = self.store.iter_next(z)
+            try:
+                z = self.store.iter_next(z)
+            except ValueError:
+                pass
         return True
 
     # metodo que mata um processo
@@ -243,11 +246,12 @@ class mainWindow:
     def newproc(self, widget):
         win = gtk.Dialog()
         win.set_title("Novo Processo")
-        win.set_size_request(300, 150)
+        win.set_size_request(300, 200)
         win.set_resizable(False)
         fix = gtk.Fixed()
         self.comando = gtk.Entry()
         self.nice = gtk.Entry()
+        self.nice.set_text("0")
         tcomando = gtk.TextBuffer()
         tcomando.set_text("Comando: ")
         tnice = gtk.TextBuffer()
@@ -260,22 +264,32 @@ class mainWindow:
         textn.set_buffer(tnice)
         create = gtk.Button("Criar")
         create.connect("clicked", self.createproc)
+        self.check = gtk.CheckButton(label="Usa Terminal", use_underline=True)
+        self.check.set_active(True)
         fix.put(textc, 30, 25)
         fix.put(textn, 30, 65)
         fix.put(self.comando, 120, 20)
         fix.put(self.nice, 120, 60)
-        fix.put(create, 120, 100)
+        fix.put(create, 120, 150)
+        fix.put(self.check, 120, 100)
         win.vbox.pack_start(fix)
         win.show_all()
 
     # metodo que cria novo processo
     def createproc(self, widget):
         comando = self.comando.get_text()
-        nice = self.comando.get_text()
-        arg = [str("nice -n {}".format(str(nice)))]
-        if os.fork() == 0:
-            os.execvp(comando, arg)
-            exit()
+        nice = self.nice.get_text()
+        terminal = self.check.get_active()
+        arg = ["0"]
+        lol = os.fork()
+        if lol == 0:
+            if terminal:
+                os.execvp("/usr/bin/xterm", ["-e", comando])
+            else:
+                os.execvp(comando, arg)
+        else:
+            proc = psutil.Process(lol)
+            proc.nice(int(nice))
 
 if __name__ == "__main__":
     window = mainWindow()
