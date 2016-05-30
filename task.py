@@ -4,10 +4,12 @@ import psutil
 import gobject
 import datetime
 import os
+import sys
 
 
 class mainWindow:
     def __init__(self):
+        self.child_pid = 0
         # cria um mapa para armazenar os processos
         self.processos = {}
         # instancia a Janela do gerenciador e define o titulo, tamanho, posicao e nao permite redimensionamento
@@ -193,6 +195,9 @@ class mainWindow:
                 z = self.store.iter_next(z)
             except ValueError:
                 pass
+            if self.child_pid != 0:
+                if self.child_pid in psutil.pids():
+                    os.waitpid(self.child_pid, 0)
         return True
 
     # metodo que mata um processo
@@ -281,14 +286,16 @@ class mainWindow:
         nice = self.nice.get_text()
         terminal = self.check.get_active()
         arg = ["0"]
-        lol = os.fork()
-        if lol == 0:
+        child_pid = os.fork()
+        if child_pid == 0:
             if terminal:
                 os.execvp("/usr/bin/xterm", ["-e", comando])
+                sys.exit(0)
             else:
                 os.execvp(comando, arg)
+                sys.exit(0)
         else:
-            proc = psutil.Process(lol)
+            proc = psutil.Process(child_pid)
             proc.nice(int(nice))
 
 if __name__ == "__main__":
