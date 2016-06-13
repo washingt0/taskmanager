@@ -7,14 +7,14 @@ import os
 import sys
 
 
-class mainWindow:
+class MainWindow:
     def __init__(self):
         self.child_pid = 0
         # cria um mapa para armazenar os processos
         self.processos = {}
         # instancia a Janela do gerenciador e define o titulo, tamanho, posicao e nao permite redimensionamento
         self.window = gtk.Dialog()
-        self.window.set_title("******* Gerenciador")
+        self.window.set_title("Gerenciador")
         self.window.set_size_request(950, 600)
         self.window.set_resizable(False)
         self.window.set_position(gtk.WIN_POS_CENTER)
@@ -299,5 +299,5 @@ class mainWindow:
             proc.nice(int(nice))
 
 if __name__ == "__main__":
-    window = mainWindow()
+    window = MainWindow()
     window.main()
