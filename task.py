@@ -1,3 +1,13 @@
+# Instituto Federal de Ciência Educação e Tecnologia do Ceará - Campus Crato
+# Curso: Bacharelado em Sistemas de Informação
+# Disciplina: Sistemas Operacionais
+# Professor Orientador: Guilherme Esmeraldo
+# Equipe: Daniele Bernardo
+#         Marcelo Bezerra
+#         Washington Santos
+# Resumo: Gerenciador de processos para GNU/Linux, escrito em python 2.7 + PyGTK e PSUtil
+# Requerimentos: Python 2.7+, PyGTK2, PSUtil
+
 #!/usr/bin/python
 import gtk
 import psutil
