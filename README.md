@@ -42,6 +42,7 @@ $ ./install_requirements.sh
 ./task.py
 ```
 
-# # 
+#
+# 
 
 * \* Para sistemas GNU/Linux deb-based.
