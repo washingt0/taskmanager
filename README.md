@@ -45,4 +45,4 @@ $ ./install_requirements.sh
 #
 # 
 
-* \* Para sistemas GNU/Linux deb-based.
+\* Para sistemas GNU/Linux deb-based.
