@@ -25,7 +25,7 @@ $ sudo apt-get install git -y
 ```
 #!bash
 
-$ git clone https://bitbucket.org/washingtonstk/taskmanager.git
+$ git clone https://github.com/washingt0/taskmanager.git
 $ cd taskmanager/
 ```
 
